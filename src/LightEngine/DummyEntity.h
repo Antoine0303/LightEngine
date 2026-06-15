@@ -6,6 +6,8 @@ class DummyEntity : public Entity
 
 	std::string m_rarity;
 	int value;
+
+	int luck = 1;
 public:
 	void OnInitialize() override;
 

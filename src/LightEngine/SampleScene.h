@@ -5,6 +5,7 @@
 class DummyEntity;
 class Collector;
 class Upgrade;
+class Magnet;
 struct Rectangle
 {
 	int x;
@@ -22,6 +23,7 @@ private:
 	//rect
 	std::vector<DummyEntity*> m_collectibles;
 	
+	Magnet* m_magnet;
 	float m_timer = 0;
 	float m_spawnRate = 0.5;
 

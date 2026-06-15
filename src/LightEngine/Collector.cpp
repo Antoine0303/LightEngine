@@ -20,8 +20,10 @@ void Collector::OnUpdate()
 void Collector::OnCollision(Entity* other)
 {
 
-
-	Data::Get()->money += dynamic_cast<DummyEntity*>(other)->GetValue();
+	if(other->IsTag(1))
+	{
+		Data::Get()->money += dynamic_cast<DummyEntity*>(other)->GetValue();
+	}
 }
 
 void Collector::OnClick()

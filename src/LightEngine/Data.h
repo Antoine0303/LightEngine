@@ -12,7 +12,8 @@ public:
     int collectorSpeed;
     float collectorSize;
     int collectorNumber;
-    int spawnRate;
+    float spawnRate;
     int capacity;
+    int luck;
 
 };

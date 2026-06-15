@@ -12,7 +12,7 @@ void Upgrade::OnClick() {
 
     Data::Get()->money -= m_price;
     m_level++;
-    m_price *= 2.5;
+    
 
     int collectorSpeed;
     int collectorSize;
@@ -23,21 +23,30 @@ void Upgrade::OnClick() {
     {
     case 1:
         data->collectorSpeed += m_value;
+        m_price *= 1.5;
         break;
     case 2:
         data->collectorSize *= m_value;
+        m_price *= 5;
         break;
 
     case 3:
         data->collectorNumber + m_value;
+        m_price *= 5;
         break;
 
     case 4:
-        data->spawnRate + m_value;
+        data->spawnRate -= m_value;
+        m_price *= 3;
         break;
 
     case 5:
-        data->capacity + m_value;
+        data->capacity *= m_value;
+        m_price *= 1.5;
+        break;
+    case 6:
+        data->luck *= m_value;
+        m_price *= 10;
         break;
     case 99:
         exit(0);
