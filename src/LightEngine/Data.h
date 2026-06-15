@@ -10,7 +10,7 @@ public:
     static Data* Get();
     int money;
     int collectorSpeed;
-    int collectorSize;
+    float collectorSize;
     int collectorNumber;
     int spawnRate;
     int capacity;

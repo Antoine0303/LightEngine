@@ -25,7 +25,7 @@ void Upgrade::OnClick() {
         data->collectorSpeed += m_value;
         break;
     case 2:
-        data->collectorSize + m_value;
+        data->collectorSize *= m_value;
         break;
 
     case 3:
@@ -95,7 +95,7 @@ void Upgrade::SetLane(int lane)
 {
     m_lane = lane;
 
-    SetPosition(20, (GetScene()->GetWindowHeight() / 15) * lane);
+    SetPosition(20, (GetScene()->GetWindowHeight() / 10) * lane);
 }
 
 bool Upgrade::IsInside(sf::Vector2i mousePos)

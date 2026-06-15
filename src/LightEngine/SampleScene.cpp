@@ -8,8 +8,8 @@
 void SampleScene::OnInitialize()
 {
 	Data::Get()->money = 0;
-	Data::Get()->capacity = 20;
-	Data::Get()->spawnRate = 1;
+	Data::Get()->capacity = 200;
+	Data::Get()->spawnRate = 0.01;
 	Data::Get()->collectorNumber = 1;
 	Data::Get()->collectorSize = 20;
 	Data::Get()->collectorSpeed = 100;
@@ -20,10 +20,16 @@ void SampleScene::OnInitialize()
 	m_collector->GoToDirection(1, 1, Data::Get()->collectorSpeed);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 2, "upgrade stylé", 5, 1, 1, 100);
+	InitUpgrade(m_upgrades.size() - 1, 1, "upgrade collector speed", 15, 10, 1, 100);
 
+	
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 14, "Quit Game", 10, 0, 99, 67);
+	InitUpgrade(m_upgrades.size() - 1, 2, "upgrade collector size", 5, 50, 2, 1.2);
+	
+
+	//exit
+	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
+	InitUpgrade(m_upgrades.size() - 1, 9, "Quit Game", 10, 0, 99, 67);
 }
 void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value)
 {
@@ -75,6 +81,7 @@ void SampleScene::OnEvent(const sf::Event& event)
 
 void SampleScene::OnUpdate()
 {
+	m_collector->SetRadius(Data::Get()->collectorSize);
 	Debug::DrawText(0, 0, std::to_string(Data::Get()->money), sf::Color::Yellow);
 	Debug::DrawText(0, 20, std::to_string(m_collectibles.size()) + "/" + std::to_string(Data::Get()->capacity), sf::Color::White);
 

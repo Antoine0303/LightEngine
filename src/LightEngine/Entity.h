@@ -40,7 +40,11 @@ public:
 	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
 	bool IsRigidBody() const { return mRigidBody; }
 
+    void SetRadius(float newRadius) { mShape.setRadius(newRadius); }
+
+
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
+  
 	sf::Shape* GetShape() { return &mShape; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
