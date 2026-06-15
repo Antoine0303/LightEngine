@@ -1,6 +1,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include <cmath>
+#include "Utils.h"
 
 namespace Utils 
 {
@@ -33,5 +34,11 @@ namespace Utils
 		float det = v1.x * v2.y - v1.y * v2.x;
 
 		return std::atan2(det, dot) * 180 / 3.14159265;
+	}
+	int Utils::GenerateRandomNumber(int min, int max)
+	{
+		
+		return rand() % (max - min + 1) + min;
+		
 	}
 }
