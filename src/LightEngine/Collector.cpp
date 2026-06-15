@@ -2,6 +2,7 @@
 #include "SampleScene.h"
 #include "Utils.h"
 #include "Data.h"
+#include "DummyEntity.h"
 void Collector::OnUpdate()
 {
 	Rectangle rect = GetScene<SampleScene>()->GetRect();
@@ -19,9 +20,8 @@ void Collector::OnUpdate()
 void Collector::OnCollision(Entity* other)
 {
 
-	other->Destroy();
 
-	Data::Get()->money += 1;
+	Data::Get()->money += dynamic_cast<DummyEntity*>(other)->GetValue();
 }
 
 void Collector::OnClick()

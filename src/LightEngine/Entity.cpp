@@ -9,15 +9,23 @@
 
 void Entity::Initialize(float radius, const sf::Color& color)
 {
+	mColor = color;
 	mDirection = sf::Vector2f(0.0f, 0.0f);
 
 	mShape.setOrigin(0.f, 0.f);
 	mShape.setRadius(radius);
-	mShape.setFillColor(color);
+
+	mShape.setFillColor(mColor);
 	
 	mTarget.isSet = false;
 
 	OnInitialize();
+}
+
+void Entity::SetColor(const sf::Color& color)
+{
+	mShape.setFillColor(color);
+
 }
 
 void Entity::Repulse(Entity* other) 
