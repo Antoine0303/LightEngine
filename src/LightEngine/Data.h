@@ -16,4 +16,7 @@ public:
     int capacity;
     int luck;
     float magnetSize;
+    float autoCollectorSpeed;
+    
+
 };

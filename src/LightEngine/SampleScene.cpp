@@ -6,20 +6,22 @@
 #include "Upgrade.h"
 #include "GameManager.h"
 #include "Data.h"
+#include "AutoCollector.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "Magnet.h"
 void SampleScene::OnInitialize()
 {
-
-	Data::Get()->money = 0;
-	Data::Get()->capacity = 100;
-	Data::Get()->spawnRate = 1.1;
-	Data::Get()->collectorNumber = 1;
-	Data::Get()->playerSize = 20;
-	Data::Get()->playerSpeed = 100;
-	Data::Get()->luck = 1;
-	Data::Get()->magnetSize = 0;
+	Data* data = Data::Get();
+	data->money = 0;
+	data->capacity = 100;
+	data->spawnRate = 1.1;
+	data->collectorNumber = 1;
+	data->playerSize = 20;
+	data->playerSpeed = 100;
+	data->luck = 1;
+	data->magnetSize = 0;
+	data->autoCollectorSpeed = 100;
 
 	m_rectangle = { GetWindowWidth()- GetWindowHeight() ,10,GetWindowHeight() -10,GetWindowHeight() - 20};
 
@@ -28,23 +30,29 @@ void SampleScene::OnInitialize()
 	//m_collector->GoToDirection(1, 1, Data::Get()->collectorSpeed);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 1, "upgrade collector speed", 10, 10, 1, 100);
+	InitUpgrade(m_upgrades.size() - 1, 1, "upgrade Player Speed", 10, 10, 1, 100);
 
 	
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 2, "upgrade collector size", 5, 50, 2, 1.2);
+	InitUpgrade(m_upgrades.size() - 1, 2, "upgrade Player Size", 5, 50, 2, 1.2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 3, "upgrade spawn rate ", 6, 10, 4, 0.2);
+	InitUpgrade(m_upgrades.size() - 1, 3, "Upgrade Spawn Rate ", 6, 10, 4, 0.2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 4, "upgrade capacity ", 10, 10, 5, 1.2);
+	InitUpgrade(m_upgrades.size() - 1, 4, "Upgrade Capacity ", 10, 10, 5, 1.2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 5, "upgrade luck ", 10, 10, 6,2);
+	InitUpgrade(m_upgrades.size() - 1, 5, "Upgrade Luck ", 10, 10, 6,2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 6, "unlock magnet ", 10, 10, 7, 2);
+	InitUpgrade(m_upgrades.size() - 1, 6, "Unlock Magnet ", 10, 10, 7, 2);
+
+	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
+	InitUpgrade(m_upgrades.size() - 1, 7, "Add Autocollector ", 10, 10, 8, 1);
+
+	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
+	InitUpgrade(m_upgrades.size() - 1, 8, "Upgrade Autocollector Speed ", 10, 10, 9, 50);
 
 	//exit
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
@@ -52,7 +60,7 @@ void SampleScene::OnInitialize()
 
 	m_magnet = CreateEntity<Magnet>(100, sf::Color::Transparent);
 }
-void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value)
+void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value, bool locked)
 {
 	m_upgrades[index]->SetLane(lane);
 	m_upgrades[index]->SetText(text);
@@ -60,7 +68,16 @@ void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLeve
 	m_upgrades[index]->SetType(type);
 	m_upgrades[index]->SetValue(value);
 	m_upgrades[index]->SetMaxLevel(maxLevel);
+	m_upgrades[index]->SetLocked(locked);
 
+
+}
+void SampleScene::AddAutoCollector()
+{
+	AutoCollector* autoCollector = CreateEntity<AutoCollector>(Data::Get()->playerSize, sf::Color::Green);
+	autoCollector->SetPosition(m_rectangle.x + m_rectangle.width / 2, m_rectangle.y + m_rectangle.height / 2);
+	autoCollector->GoToDirection(1, 1, Data::Get()->autoCollectorSpeed);
+	m_autoCollectors.push_back(autoCollector);
 }
 void SampleScene::OnEvent(const sf::Event& event)
 {
@@ -116,15 +133,24 @@ void SampleScene::OnUpdate()
 			m_collectibles[i]->GoToPosition(m_magnet->GetPosition().x, m_magnet->GetPosition().y, Data::Get()->playerSpeed *2);
 			
 		}
-	}
-	for (int i = 0; i < m_collectibles.size(); i++)
-	{
 		if (m_collector->IsColliding(m_collectibles[i]))
 		{
 			m_collectibles[i]->Destroy();
 			m_collectibles.erase(m_collectibles.begin() + i);
-			return;
 		}
 	}
+	for (int i = 0; i < m_collectibles.size(); i++)
+	{
+		for (AutoCollector* collector : m_autoCollectors) {
+
+			if (collector->IsColliding(m_collectibles[i]))
+			{
+				m_collectibles[i]->Destroy();
+				m_collectibles.erase(m_collectibles.begin() + i);
+				return;
+			}
+		}
+	}
+
 }
 
