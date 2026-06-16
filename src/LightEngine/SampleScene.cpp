@@ -95,11 +95,28 @@ void SampleScene::OnEvent(const sf::Event& event)
 	}
 
 
+	if (event.key.code == sf::Keyboard::C && event.type == sf::Event::EventType::KeyPressed) {
+		Data* data = Data::Get();
+		if (data->cheat == false) {
+			data->saveluck = data->luck;
+			data->luck = 100000000000000;
+			data->cheat = true;
+		}
+		else {
+			data->luck = data->saveluck;
+			data->cheat = false;
+		}
+
+	}
+
 	if (event.mouseButton.button == sf::Mouse::Button::Left && event.type == sf::Event::EventType::MouseButtonPressed)
 	{
-		if (m_collector->IsInside(event.mouseButton.x, event.mouseButton.y) == true)
-		{
-			m_collector->OnClick();
+		for (AutoCollector* autocollector : m_autoCollectors) {
+
+			if (autocollector->IsInside(event.mouseButton.x, event.mouseButton.y) == true)
+			{
+				autocollector->OnClick();
+			}
 		}
 		for (int i = 0; i < m_upgrades.size(); i++)
 		{

@@ -6,7 +6,9 @@
 void AutoCollector::OnUpdate()
 {
 	
-
+	if (Data::Get()->cheat) {
+		SetColor(Utils::RandomColor());
+	}
 	Rectangle rect = GetScene<SampleScene>()->GetRect();
 	if (GetPosition(0, 0).x <= rect.x || GetPosition(1, 1).x >= rect.x + rect.width)
 	{
@@ -30,5 +32,9 @@ void AutoCollector::OnCollision(Entity* other)
 
 void AutoCollector::OnClick()
 {
-	GoToDirection(Utils::GenerateRandomNumber(0, GetScene()->GetWindowWidth()), Utils::GenerateRandomNumber(0, GetScene()->GetWindowHeight()), Data::Get()->playerSpeed);
+	GoToDirection(Utils::GenerateRandomNumber(0, GetScene()->GetWindowWidth()), Utils::GenerateRandomNumber(0, GetScene()->GetWindowHeight()), Data::Get()->autoCollectorSpeed);
+}
+
+void AutoCollector::OnInitialize() {
+	SetTag(2);
 }

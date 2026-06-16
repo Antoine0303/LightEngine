@@ -19,5 +19,8 @@ public:
     float autoCollectorSpeed;
     int ballsCollected;
     bool stats;
+    float saveluck;
+    bool cheat;
+    
 
 };

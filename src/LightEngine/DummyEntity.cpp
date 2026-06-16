@@ -2,41 +2,7 @@
 #include "Utils.h"
 #include <iostream>
 #include "Data.h"
-sf::Color RandomColor() {
-	sf::Color color;
 
-	int number = Utils::GenerateRandomNumber(1, 7);
-
-	switch (number)
-	{
-	case 1:
-		color = sf::Color::Blue;
-		break;
-	case 2:
-		color = sf::Color::Cyan;
-		break;
-	case 3:
-		color = sf::Color::Green;
-		break;
-	case 4:
-		color = sf::Color::Magenta;
-		break;
-	case 5:
-		color = sf::Color::Red;
-		break;
-	case 6:
-		color = sf::Color::White;
-		break;
-	case 7:
-		color = sf::Color::Yellow;
-		break;
-
-	default:
-		break;
-	}
-
-	return color;
-}
 void DummyEntity::OnInitialize()
 {
 	SetTag(1);
@@ -94,6 +60,6 @@ void DummyEntity::OnCollision(Entity* other)
 void DummyEntity::OnUpdate()
 {
 	if (m_rarity == "Godly")
-		SetColor(RandomColor());
+		SetColor(Utils::RandomColor());
 }
 

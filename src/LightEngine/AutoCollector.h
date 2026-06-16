@@ -10,5 +10,7 @@ public:
 	void OnCollision(Entity* other) override;
 
 	void OnClick();
+
+	void OnInitialize() override;
 };
 
