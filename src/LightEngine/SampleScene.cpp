@@ -12,6 +12,8 @@
 #include "Magnet.h"
 void SampleScene::OnInitialize()
 {
+
+
 	Data* data = Data::Get();
 	data->money = 0;
 	data->capacity = 10;
@@ -20,13 +22,14 @@ void SampleScene::OnInitialize()
 	data->playerSize = 20;
 	data->playerSpeed = 100;
 	data->luck = 0.2;
-	data->magnetSize = 0; 
+	data->magnetSize = 0;
 	data->autoCollectorSpeed = 100;
+	data->stats = false;
 
-	m_rectangle = { GetWindowWidth()- GetWindowHeight() ,10,GetWindowHeight() -10,GetWindowHeight() - 20};
+	m_rectangle = { GetWindowWidth() - GetWindowHeight() ,10,GetWindowHeight() - 10,GetWindowHeight() - 20 };
 
 	m_collector = CreateEntity<Collector>(Data::Get()->playerSize, sf::Color::Red);
-	m_collector->SetPosition(m_rectangle.x + m_rectangle.width /2, m_rectangle.y + m_rectangle.height / 2);
+	m_collector->SetPosition(m_rectangle.x + m_rectangle.width / 2, m_rectangle.y + m_rectangle.height / 2);
 	//m_collector->GoToDirection(1, 1, Data::Get()->collectorSpeed);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
@@ -39,7 +42,7 @@ void SampleScene::OnInitialize()
 	InitUpgrade(m_upgrades.size() - 1, 3, "upgrade capacity ", 6, 10, 5, 2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 4, "upgrade luck ", 10, 10, 6,2);
+	InitUpgrade(m_upgrades.size() - 1, 4, "upgrade luck ", 10, 10, 6, 2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
 	InitUpgrade(m_upgrades.size() - 1, 5, "unlock magnet ", 8, 100, 7, 0.5);
@@ -48,7 +51,8 @@ void SampleScene::OnInitialize()
 	InitUpgrade(m_upgrades.size() - 1, 6, "Add Autocollector ", 10, 10, 8, 1);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 7, "Upgrade Autocollector Speed ", 10, 10, 9, 50);
+	InitUpgrade(m_upgrades.size() - 1, 7, "Upgrade Autocollector Speed ", 10, 10, 9, 50, true);
+
 
 	//exit
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
@@ -75,8 +79,21 @@ void SampleScene::AddAutoCollector()
 	autoCollector->GoToDirection(1, 1, Data::Get()->autoCollectorSpeed);
 	m_autoCollectors.push_back(autoCollector);
 }
+void SampleScene::UnlockUpgrade(int index)
+{
+	 m_upgrades[index]->SetLocked(false); 
+}
 void SampleScene::OnEvent(const sf::Event& event)
 {
+
+	if (event.key.code == sf::Keyboard::E && event.type == sf::Event::EventType::KeyPressed)
+	{
+		if(Data::Get()->stats == false)
+			Data::Get()->stats = true;
+		else
+			Data::Get()->stats = false;
+	}
+
 
 	if (event.mouseButton.button == sf::Mouse::Button::Left && event.type == sf::Event::EventType::MouseButtonPressed)
 	{
@@ -96,10 +113,29 @@ void SampleScene::OnEvent(const sf::Event& event)
 	}
 }
 
+void SampleScene::ShowStats()
+{
+	Data* data = Data::Get();
+	Debug::DrawText(m_rectangle.x +10, 20, "player speed : " + std::to_string(data->playerSpeed), 0, 0, sf::Color::White, 10);
+
+	Debug::DrawText(m_rectangle.x + 10, 40, "spawn rate : " + std::to_string(data->spawnRate), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 60, "capacity : " + std::to_string(data->capacity), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 80, "luck : x" + std::to_string((int)(data->luck*5)), 0, 0, sf::Color::White, 10);
+
+	Debug::DrawText(m_rectangle.x + 10, 110, "magnet size" + std::to_string((int)data->magnetSize), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 140, "number of autocollectors : " + std::to_string(data->collectorNumber), 0, 0, sf::Color::White, 10);
+
+	Debug::DrawText(m_rectangle.x + 10, 160, "autocollector speed : " + std::to_string((int)data->autoCollectorSpeed) + "%", 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 190, "balls collected : " + std::to_string(data->ballsCollected),0,0, sf::Color::White,10);
+
+	
+}
+
 
 void SampleScene::OnUpdate()
 {
-
+	if (Data::Get()->stats)
+		ShowStats();
 
 	m_magnet->SetPosition(m_collector->GetPosition().x, m_collector->GetPosition().y);
 	m_collector->SetRadius(Data::Get()->playerSize);
@@ -111,8 +147,8 @@ void SampleScene::OnUpdate()
 	if (m_timer >= Data::Get()->spawnRate && m_collectibles.size() < Data::Get()->capacity)
 	{
 		m_collectibles.push_back(CreateEntity<DummyEntity>(5, sf::Color::Green));
-		m_collectibles[m_collectibles.size() - 1]->SetPosition(Utils::GenerateRandomNumber(m_rectangle.x+5, m_rectangle.x + m_rectangle.width-5),
-			Utils::GenerateRandomNumber(m_rectangle.y+5, m_rectangle.y + m_rectangle.height -5));
+		m_collectibles[m_collectibles.size() - 1]->SetPosition(Utils::GenerateRandomNumber(m_rectangle.x + 5, m_rectangle.x + m_rectangle.width - 5),
+			Utils::GenerateRandomNumber(m_rectangle.y + 5, m_rectangle.y + m_rectangle.height - 5));
 		m_timer = 0;
 	}
 
@@ -126,14 +162,15 @@ void SampleScene::OnUpdate()
 	{
 		if (m_magnet->IsColliding(m_collectibles[i]))
 		{
-			m_collectibles[i]->GoToPosition(m_magnet->GetPosition().x, m_magnet->GetPosition().y, Data::Get()->playerSpeed *2);
-			
+			m_collectibles[i]->GoToPosition(m_magnet->GetPosition().x, m_magnet->GetPosition().y, Data::Get()->playerSpeed * 2);
+
 		}
 		if (m_collector->IsColliding(m_collectibles[i]))
 		{
 			m_collectibles[i]->Destroy();
 			m_collectibles.erase(m_collectibles.begin() + i);
-			
+			Data::Get()->ballsCollected++;
+
 		}
 	}
 	for (int i = 0; i < m_collectibles.size(); i++)
@@ -144,6 +181,7 @@ void SampleScene::OnUpdate()
 			{
 				m_collectibles[i]->Destroy();
 				m_collectibles.erase(m_collectibles.begin() + i);
+				Data::Get()->ballsCollected++;
 				return;
 			}
 		}

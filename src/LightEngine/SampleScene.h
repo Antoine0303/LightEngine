@@ -46,6 +46,8 @@ public:
 	void AddMoney(int value) { m_money += value; };
 	void InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value, bool locked = false);
 	void AddAutoCollector();
+	void ShowStats();
+	void UnlockUpgrade(int index);
 };
 
 

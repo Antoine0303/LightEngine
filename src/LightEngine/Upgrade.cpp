@@ -6,7 +6,7 @@ void Upgrade::OnClick() {
 
     Data* data = Data::Get();
 
-    if (m_level >= m_MaxLevel || Data::Get()->money < m_price) {
+    if (m_level >= m_MaxLevel || Data::Get()->money < m_price || m_locked) {
         return;
     }
 
@@ -49,7 +49,6 @@ void Upgrade::OnClick() {
             data->magnetSize += 2;
             m_text = "upgrade magnet size";
         }
-
         else
         {
             data->magnetSize += m_value;
@@ -60,11 +59,13 @@ void Upgrade::OnClick() {
         break;
 
     case 8:
-        m_locked = false;
+       
         data->collectorNumber += m_value;
 
         GetScene<SampleScene>()->AddAutoCollector();
         m_price *= 10;
+        GetScene<SampleScene>()->UnlockUpgrade(6);
+
         break;
 
     case 9:

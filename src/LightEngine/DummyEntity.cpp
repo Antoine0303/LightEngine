@@ -63,18 +63,18 @@ void DummyEntity::OnInitialize()
 	{
 		m_rarity = "Legendary";
 		SetColor(sf::Color::Yellow);
-		value = 1000;
+		value = 250;
 	}
 	if (random <= 10 * Data::Get()->luck)
 	{
 		m_rarity = "Mythical";
 		SetColor(sf::Color::Red);
-		value = 10000;
+		value = 500;
 	}
 	if (random <= 1 * Data::Get()->luck)
 	{
 		m_rarity = "Godly";
-		value = 100000;
+		value = 1000;
 	}
 
 	

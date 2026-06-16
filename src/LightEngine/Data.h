@@ -17,6 +17,7 @@ public:
     float luck;
     float magnetSize;
     float autoCollectorSpeed;
-    
+    int ballsCollected;
+    bool stats;
 
 };
