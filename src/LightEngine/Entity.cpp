@@ -168,7 +168,7 @@ void Entity::Update()
 
 		Debug::DrawLine(x1, y1, x2, y2, sf::Color::Cyan);
 
-		Debug::DrawCircle(mTarget.position.x, mTarget.position.y, 5.f, sf::Color::Magenta);
+		Debug::DrawFillCircle(mTarget.position.x, mTarget.position.y, 5.f, sf::Color::Magenta);
 
 		mTarget.distance -= distance;
 

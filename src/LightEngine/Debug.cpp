@@ -58,17 +58,6 @@ void Debug::DrawRectangle(float x, float y, float width, float height, const sf:
 	DrawLine(x, y + height, x, y, color);
 }
 
-void Debug::DrawCircle(float x, float y, float radius, const sf::Color& color)
-{
-	sf::CircleShape circle;
-
-	circle.setRadius(radius);
-	circle.setFillColor(color);
-	circle.setPosition(x - radius, y - radius);
-
-	Debug::Get()->mCircles.push_back(circle);
-}
-
 void Debug::DrawText(float x, float y, const std::string& text, const sf::Color& color)
 {
 	DrawText(x, y, text, 0.f, 0.f, color, 20);
@@ -91,4 +80,28 @@ void Debug::DrawText(float x, float y, const std::string& text, float ratioX, fl
 	sfText.setOrigin(bounds.width * ratioX, bounds.height * ratioY);
 
 	Debug::Get()->mTexts.push_back(sfText);
+}
+
+void Debug::DrawCircle(float x, float y, float radius, const sf::Color& color)
+{
+	sf::CircleShape circle;
+
+	circle.setRadius(radius);
+	circle.setOutlineColor(color);
+	circle.setOutlineThickness(1);
+	circle.setFillColor(sf::Color::Transparent);
+	circle.setPosition(x - radius, y - radius);
+
+	Debug::Get()->mCircles.push_back(circle);
+}
+
+void Debug::DrawFillCircle(float x, float y, float radius, const sf::Color& color)
+{
+	sf::CircleShape circle;
+
+	circle.setRadius(radius);
+	circle.setFillColor(color);
+	circle.setPosition(x - radius, y - radius);
+
+	Debug::Get()->mCircles.push_back(circle);
 }

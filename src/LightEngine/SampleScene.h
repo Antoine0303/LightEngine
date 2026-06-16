@@ -14,6 +14,7 @@ struct Rectangle
 	int height;
 };
 
+
 class SampleScene : public Scene
 {
 private:
@@ -21,11 +22,15 @@ private:
 	
 	Rectangle m_rectangle; 
 	//rect
+
 	std::vector<DummyEntity*> m_collectibles;
 	
+
 	Magnet* m_magnet;
 	float m_timer = 0;
 	float m_spawnRate = 0.5;
+
+
 
 	int m_capacity = 20;
 	int m_money = 0;
@@ -35,7 +40,6 @@ public:
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
 	Rectangle GetRect() { return m_rectangle; };
-
 	int GetMoney() { return m_money; };
 	void SetMoney(int value) { m_money = value; };
 	void AddMoney(int value) { m_money += value; };

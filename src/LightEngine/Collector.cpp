@@ -5,16 +5,59 @@
 #include "DummyEntity.h"
 void Collector::OnUpdate()
 {
-	Rectangle rect = GetScene<SampleScene>()->GetRect();
+	
 
-	if (GetPosition(0, 0).x <= rect.x|| GetPosition(1, 1).x >= rect.x+ rect.width)
-	{
-		SetDirection(-mDirection.x, mDirection.y, Data::Get()->collectorSpeed);
+	float speed = Data::Get()->collectorSpeed;
+	Rectangle rect = GetScene<SampleScene>()->GetRect();
+	sf::Vector2f pos = GetPosition();
+
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+		if (GetPosition(0, 0).y <= rect.y) {
+			SetPosition(pos.x, rect.y, 0.5 ,0);
+			return;
+		}
+		SetPosition(pos.x, pos.y - GetDeltaTime() * speed);
 	}
-	if (GetPosition(0, 0).y <= rect.y || GetPosition(1, 1).y >= rect.y + rect.height)
-	{
-		SetDirection(mDirection.x, -mDirection.y, Data::Get()->collectorSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+		if (GetPosition(1, 1).y >= rect.y + rect.height) {
+			SetPosition(pos.x, rect.y + rect.height, 0.5, 1);
+			return;
+		}
+		SetPosition(pos.x, pos.y + GetDeltaTime() * speed);
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+		if (GetPosition(0, 0).x <= rect.x) {
+			SetPosition(rect.x, pos.y, 0, 0.5);
+			return;
+		}
+		SetPosition(pos.x - GetDeltaTime() * speed, pos.y);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		if (GetPosition(1, 1).x >= rect.x + rect.width) {
+			SetPosition(rect.x + rect.width, pos.y, 1, 0.5);
+			return;
+		}
+		SetPosition(pos.x + GetDeltaTime() * speed, pos.y);
+	}
+
+
+
+	/*if (GetPosition(1, 1).y >= rect.y + rect.height) {
+		SetPosition(pos.x, pos.y - GetDeltaTime() * speed);
+
+	}
+	if (GetPosition(0, 0).y <= rect.y) {
+		SetPosition(pos.x, pos.y + GetDeltaTime() * speed);
+
+	}
+	if (GetPosition(1, 1).x >= rect.x + rect.width) {
+		SetPosition(pos.x - GetDeltaTime() * speed, pos.y);
+
+	}
+	if (GetPosition(0, 0).x <= rect.x) {
+		SetPosition(pos.x + GetDeltaTime() * speed, pos.y);
+	}*/
 }
 
 void Collector::OnCollision(Entity* other)
@@ -28,6 +71,6 @@ void Collector::OnCollision(Entity* other)
 
 void Collector::OnClick()
 {
-	GoToDirection(Utils::GenerateRandomNumber(0, GetScene()->GetWindowWidth()), Utils::GenerateRandomNumber(0, GetScene()->GetWindowHeight()), Data::Get()->collectorSpeed);
+	//GoToDirection(Utils::GenerateRandomNumber(0, GetScene()->GetWindowWidth()), Utils::GenerateRandomNumber(0, GetScene()->GetWindowHeight()), Data::Get()->collectorSpeed);
 
 }

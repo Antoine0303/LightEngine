@@ -13,12 +13,6 @@ void Upgrade::OnClick() {
     Data::Get()->money -= m_price;
     m_level++;
     
-
-    int collectorSpeed;
-    int collectorSize;
-    int collectorNumber;
-    int spawnRate;
-    int capacity;
     switch (m_type)
     {
     case 1:

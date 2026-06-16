@@ -4,10 +4,14 @@
 #include "Collector.h"
 #include "Debug.h"
 #include "Upgrade.h"
+#include "GameManager.h"
 #include "Data.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include "Magnet.h"
 void SampleScene::OnInitialize()
 {
+
 	Data::Get()->money = 0;
 	Data::Get()->capacity = 100;
 	Data::Get()->spawnRate = 0.1;
@@ -19,7 +23,7 @@ void SampleScene::OnInitialize()
 
 	m_collector = CreateEntity<Collector>(Data::Get()->collectorSize, sf::Color::Red);
 	m_collector->SetPosition(m_rectangle.x + m_rectangle.width /2, m_rectangle.y + m_rectangle.height / 2);
-	m_collector->GoToDirection(1, 1, Data::Get()->collectorSpeed);
+	//m_collector->GoToDirection(1, 1, Data::Get()->collectorSpeed);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
 	InitUpgrade(m_upgrades.size() - 1, 1, "upgrade collector speed", 10, 10, 1, 100);
@@ -55,11 +59,8 @@ void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLeve
 }
 void SampleScene::OnEvent(const sf::Event& event)
 {
-	if (event.type != sf::Event::EventType::MouseButtonPressed)
-		return;
 
-	
-	if (event.mouseButton.button == sf::Mouse::Button::Left)
+	if (event.mouseButton.button == sf::Mouse::Button::Left && event.type == sf::Event::EventType::MouseButtonPressed)
 	{
 		if (m_collector->IsInside(event.mouseButton.x, event.mouseButton.y) == true)
 		{
@@ -78,9 +79,10 @@ void SampleScene::OnEvent(const sf::Event& event)
 }
 
 
-
 void SampleScene::OnUpdate()
 {
+
+
 	m_magnet->SetPosition(m_collector->GetPosition().x, m_collector->GetPosition().y);
 	m_collector->SetRadius(Data::Get()->collectorSize);
 	Debug::DrawText(0, 0, std::to_string(Data::Get()->money), sf::Color::Yellow);

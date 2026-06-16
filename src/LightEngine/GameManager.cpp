@@ -92,7 +92,7 @@ void GameManager::HandleInput()
 void GameManager::Update()
 {
 	mpScene->OnUpdate();
-
+	
     //Update
     for (auto it = mEntities.begin(); it != mEntities.end(); )
     {
