@@ -13,12 +13,12 @@ void SampleScene::OnInitialize()
 {
 
 	Data::Get()->money = 0;
-	Data::Get()->capacity = 100;
-	Data::Get()->spawnRate = 1.1;
-	Data::Get()->collectorNumber = 1;
+	Data::Get()->capacity = 10;
+	Data::Get()->spawnRate = 1;
+	Data::Get()->collectorNumber = 0;
 	Data::Get()->playerSize = 20;
 	Data::Get()->playerSpeed = 100;
-	Data::Get()->luck = 1;
+	Data::Get()->luck = 0.2;
 	Data::Get()->magnetSize = 0;
 
 	m_rectangle = { GetWindowWidth()- GetWindowHeight() ,10,GetWindowHeight() -10,GetWindowHeight() - 20};
@@ -28,23 +28,21 @@ void SampleScene::OnInitialize()
 	//m_collector->GoToDirection(1, 1, Data::Get()->collectorSpeed);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 1, "upgrade collector speed", 10, 10, 1, 100);
-
-	
-	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 2, "upgrade collector size", 5, 50, 2, 1.2);
+	InitUpgrade(m_upgrades.size() - 1, 1, "UPGRADE PLAYER SPEED", 8, 10, 1, 50);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 3, "upgrade spawn rate ", 6, 10, 4, 0.2);
+	InitUpgrade(m_upgrades.size() - 1, 2, "upgrade spawn rate ", 7, 10, 4, 0.5);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 4, "upgrade capacity ", 10, 10, 5, 1.2);
+	InitUpgrade(m_upgrades.size() - 1, 3, "upgrade capacity ", 6, 10, 5, 2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 5, "upgrade luck ", 10, 10, 6,2);
+	InitUpgrade(m_upgrades.size() - 1, 4, "upgrade luck ", 10, 10, 6,2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 6, "unlock magnet ", 10, 10, 7, 2);
+	InitUpgrade(m_upgrades.size() - 1, 5, "unlock magnet ", 8, 100, 7, 0.5);
+
+
 
 	//exit
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
@@ -123,7 +121,7 @@ void SampleScene::OnUpdate()
 		{
 			m_collectibles[i]->Destroy();
 			m_collectibles.erase(m_collectibles.begin() + i);
-			return;
+			
 		}
 	}
 }

@@ -41,7 +41,7 @@ void DummyEntity::OnInitialize()
 {
 	SetTag(1);
 	int random = Utils::GenerateRandomNumber(1, 100000);
-	if (random <= 100000 * Data::Get()->luck)
+	if (random <= 100000 )
 	{
 		m_rarity = "Common";
 		SetColor(sf::Color(120,120,120));

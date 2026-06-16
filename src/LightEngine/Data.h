@@ -14,6 +14,6 @@ public:
     int collectorNumber;
     float spawnRate;
     int capacity;
-    int luck;
+    float luck;
     float magnetSize;
 };

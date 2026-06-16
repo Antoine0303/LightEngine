@@ -17,46 +17,45 @@ void Upgrade::OnClick() {
     {
     case 1:
         data->playerSpeed += m_value;
-        m_price *= 1.5;
+        m_price *= 3;
         break;
     case 2:
         data->playerSize *= m_value;
         m_price *= 5;
         break;
 
-    case 3:
+    case 3: 
         data->collectorNumber + m_value;
         m_price *= 5;
         break;
 
     case 4:
-        data->spawnRate -= m_value;
+        data->spawnRate *= m_value;
         m_price *= 3;
         break;
 
     case 5:
         data->capacity *= m_value;
-        m_price *= 1.5;
+        m_price *= 3;
         break;
     case 6:
         data->luck *= m_value;
-        m_price *= 10;
+        m_price *= 2.5;
         break;
     case 7:
         if(m_level == 2)
         {
             m_price *= 0.5;
             data->magnetSize += 2;
+            m_text = "upgrade magnet size";
         }
 
         else
         {
-            data->magnetSize += 0.5;
-            m_text = "upgrade magnet size";
-            m_price *= 1.5;
+            data->magnetSize += m_value;
+            
+            m_price *= 3;
         }
-
-        
 
         break;
     case 99:
