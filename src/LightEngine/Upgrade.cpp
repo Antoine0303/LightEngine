@@ -64,14 +64,14 @@ void Upgrade::OnClick() {
         data->collectorNumber += m_value;
 
         GetScene<SampleScene>()->AddAutoCollector();
-        m_price *= 10;
+        m_price *= 3;
         GetScene<SampleScene>()->UnlockUpgrade(6);
 
         break;
 
     case 9:
         data->autoCollectorSpeed += m_value;
-        m_price *= 10;
+        m_price *= 3;
         break;
     case 99:
         exit(0);
@@ -109,7 +109,10 @@ void Upgrade::Draw(sf::Vector2i mousePos)
     
     if (m_type == 99)
         return;
-
+    if(m_locked && m_level < m_MaxLevel)
+    {
+        return;
+    }
     Debug::DrawText(350, pos.y - 30, "level " + std::to_string(m_level) + "/" + std::to_string(m_MaxLevel), 1, 0, sf::Color::White, 20);
     if (m_level >= m_MaxLevel)
     {
@@ -121,13 +124,15 @@ void Upgrade::Draw(sf::Vector2i mousePos)
         return;
     if (Data::Get()->money < m_price)
     {
-        Debug::DrawText(10, pos.y - 30, std::to_string(m_price), sf::Color::Red);
+        Debug::DrawText(10, pos.y - 30, Utils::NumberFormat(m_price), sf::Color::Red);
     }
     else
-        Debug::DrawText(10, pos.y - 30, std::to_string(m_price), sf::Color::Yellow);
+        Debug::DrawText(10, pos.y - 30, Utils::NumberFormat(m_price), sf::Color::Yellow);
 
     
 }
+
+
 void Upgrade::SetLane(int lane)
 {
     m_lane = lane;

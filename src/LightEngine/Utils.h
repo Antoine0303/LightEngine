@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/System/Vector2.hpp>
-
+#include <iostream>
 namespace Utils
 {
 	bool Normalize(sf::Vector2f& vector);
@@ -9,4 +9,5 @@ namespace Utils
 	float GetAngleDegree(const sf::Vector2f& v1, const sf::Vector2f& v2);
 	int GenerateRandomNumber(int min, int max);
 	sf::Color RandomColor();
+	std::string NumberFormat(float number);
 }

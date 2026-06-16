@@ -48,10 +48,10 @@ void SampleScene::OnInitialize()
 	InitUpgrade(m_upgrades.size() - 1, 5, "unlock magnet ", 8, 100, 7, 0.5);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 6, "Add Autocollector ", 10, 10, 8, 1);
+	InitUpgrade(m_upgrades.size() - 1, 6, "Add Autocollector ", 5, 1000, 8, 1);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 7, "Upgrade Autocollector Speed ", 10, 10, 9, 50, true);
+	InitUpgrade(m_upgrades.size() - 1, 7, "Upgrade Autocollector Speed ", 10, 500, 9, 50, true);
 
 
 	//exit
@@ -133,17 +133,17 @@ void SampleScene::OnEvent(const sf::Event& event)
 void SampleScene::ShowStats()
 {
 	Data* data = Data::Get();
-	Debug::DrawText(m_rectangle.x +10, 20, "player speed : " + std::to_string(data->playerSpeed), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x +10, 20, "player speed : " + Utils::NumberFormat(data->playerSpeed), 0, 0, sf::Color::White, 10);
 
-	Debug::DrawText(m_rectangle.x + 10, 40, "spawn rate : " + std::to_string(data->spawnRate), 0, 0, sf::Color::White, 10);
-	Debug::DrawText(m_rectangle.x + 10, 60, "capacity : " + std::to_string(data->capacity), 0, 0, sf::Color::White, 10);
-	Debug::DrawText(m_rectangle.x + 10, 80, "luck : x" + std::to_string((int)(data->luck*5)), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 40, "spawn rate : " + Utils::NumberFormat(data->spawnRate), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 60, "capacity : " + Utils::NumberFormat(data->capacity), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 80, "luck : x" + Utils::NumberFormat(data->luck*5), 0, 0, sf::Color::White, 10);
 
-	Debug::DrawText(m_rectangle.x + 10, 110, "magnet size" + std::to_string((int)data->magnetSize), 0, 0, sf::Color::White, 10);
-	Debug::DrawText(m_rectangle.x + 10, 140, "number of autocollectors : " + std::to_string(data->collectorNumber), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 110, "magnet size" + Utils::NumberFormat(data->magnetSize), 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 140, "number of autocollectors : " + Utils::NumberFormat(data->collectorNumber), 0, 0, sf::Color::White, 10);
 
-	Debug::DrawText(m_rectangle.x + 10, 160, "autocollector speed : " + std::to_string((int)data->autoCollectorSpeed) + "%", 0, 0, sf::Color::White, 10);
-	Debug::DrawText(m_rectangle.x + 10, 190, "balls collected : " + std::to_string(data->ballsCollected),0,0, sf::Color::White,10);
+	Debug::DrawText(m_rectangle.x + 10, 160, "autocollector speed : " + Utils::NumberFormat(data->autoCollectorSpeed) + "%", 0, 0, sf::Color::White, 10);
+	Debug::DrawText(m_rectangle.x + 10, 190, "balls collected : " + Utils::NumberFormat(data->ballsCollected),0,0, sf::Color::White,10);
 
 	
 }
@@ -154,10 +154,13 @@ void SampleScene::OnUpdate()
 	if (Data::Get()->stats)
 		ShowStats();
 
+	if(Data::Get()->cheat)
+		Debug::DrawText(m_rectangle.x + m_rectangle.width/2, m_rectangle.y + m_rectangle.height / 2, "CHEAT MODE ACTIVE" , 0.5, 0.5, Utils::RandomColor(), 67);
+	
 	m_magnet->SetPosition(m_collector->GetPosition().x, m_collector->GetPosition().y);
 	m_collector->SetRadius(Data::Get()->playerSize);
 	m_magnet->SetRadius(Data::Get()->magnetSize * Data::Get()->playerSize);
-	Debug::DrawText(0, 0, std::to_string(Data::Get()->money), sf::Color::Yellow);
+	Debug::DrawText(0, 0, Utils::NumberFormat( Data::Get()->money), sf::Color::Yellow);
 	Debug::DrawText(0, 20, std::to_string(m_collectibles.size()) + "/" + std::to_string(Data::Get()->capacity), sf::Color::White);
 
 	m_timer += GetDeltaTime();
@@ -172,7 +175,7 @@ void SampleScene::OnUpdate()
 	Debug::DrawRectangle(m_rectangle.x, m_rectangle.y, m_rectangle.width, m_rectangle.height, sf::Color::White);
 	for (int i = 0; i < m_upgrades.size(); i++)
 	{
-		m_upgrades[i]->Draw(sf::Mouse::getPosition());
+		m_upgrades[i]->Draw(sf::Mouse::getPosition(*(GameManager::Get()->GetWindow())));
 
 	}
 	for (int i = 0; i < m_collectibles.size(); i++)

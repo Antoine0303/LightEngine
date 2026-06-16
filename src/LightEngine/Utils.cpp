@@ -2,7 +2,9 @@
 #include <SFML/Graphics/Color.hpp>
 #include <cmath>
 #include "Utils.h"
-
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 namespace Utils 
 {
     bool Normalize(sf::Vector2f& vector)
@@ -43,39 +45,61 @@ namespace Utils
 	}
 	
 	sf::Color RandomColor() {
-	sf::Color color;
+		sf::Color color;
 
-	int number = Utils::GenerateRandomNumber(1, 7);
+		int number = Utils::GenerateRandomNumber(1, 7);
 
-	switch (number)
-	{
-	case 1:
-		color = sf::Color::Blue;
-		break;
-	case 2:
-		color = sf::Color::Cyan;
-		break;
-	case 3:
-		color = sf::Color::Green;
-		break;
-	case 4:
-		color = sf::Color::Magenta;
-		break;
-	case 5:
-		color = sf::Color::Red;
-		break;
-	case 6:
-		color = sf::Color::White;
-		break;
-	case 7:
-		color = sf::Color::Yellow;
-		break;
+		switch (number)
+		{
+		case 1:
+			color = sf::Color::Blue;
+			break;
+		case 2:
+			color = sf::Color::Cyan;
+			break;
+		case 3:
+			color = sf::Color::Green;
+			break;
+		case 4:
+			color = sf::Color::Magenta;
+			break;
+		case 5:
+			color = sf::Color::Red;
+			break;
+		case 6:
+			color = sf::Color::White;
+			break;
+		case 7:
+			color = sf::Color::Yellow;
+			break;
 
-	default:
-		break;
+		default:
+			break;
+		}
+
+		return color;
 	}
+	std::string NumberFormat(float number)
+	{
+		const char* suffixes[] = { "", "k", "M", "B", "T" };
+		int suffixIndex = 0;
 
-	return color;
-}
+		while (number >= 1000.0f && suffixIndex < 4)
+		{
+			number /= 1000.0f;
+			suffixIndex++;
+		}
+
+		std::ostringstream oss;
+
+		if (number >= 10.0f || suffixIndex == 0)
+			oss << std::fixed << std::setprecision(0);
+		else
+			oss << std::fixed << std::setprecision(2);
+
+		oss << number << suffixes[suffixIndex];
+
+		return oss.str();
+	}
 }
 
