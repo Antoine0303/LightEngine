@@ -14,14 +14,16 @@ void SampleScene::OnInitialize()
 
 	Data::Get()->money = 0;
 	Data::Get()->capacity = 100;
-	Data::Get()->spawnRate = 0.1;
+	Data::Get()->spawnRate = 1.1;
 	Data::Get()->collectorNumber = 1;
-	Data::Get()->collectorSize = 20;
-	Data::Get()->collectorSpeed = 100;
+	Data::Get()->playerSize = 20;
+	Data::Get()->playerSpeed = 100;
 	Data::Get()->luck = 1;
+	Data::Get()->magnetSize = 0;
+
 	m_rectangle = { GetWindowWidth()- GetWindowHeight() ,10,GetWindowHeight() -10,GetWindowHeight() - 20};
 
-	m_collector = CreateEntity<Collector>(Data::Get()->collectorSize, sf::Color::Red);
+	m_collector = CreateEntity<Collector>(Data::Get()->playerSize, sf::Color::Red);
 	m_collector->SetPosition(m_rectangle.x + m_rectangle.width /2, m_rectangle.y + m_rectangle.height / 2);
 	//m_collector->GoToDirection(1, 1, Data::Get()->collectorSpeed);
 
@@ -33,13 +35,16 @@ void SampleScene::OnInitialize()
 	InitUpgrade(m_upgrades.size() - 1, 2, "upgrade collector size", 5, 50, 2, 1.2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 4, "upgrade spawn rate ", 8, 10, 4, 0.1);
+	InitUpgrade(m_upgrades.size() - 1, 3, "upgrade spawn rate ", 6, 10, 4, 0.2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 5, "upgrade capacity ", 10, 10, 5, 1.2);
+	InitUpgrade(m_upgrades.size() - 1, 4, "upgrade capacity ", 10, 10, 5, 1.2);
 
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
-	InitUpgrade(m_upgrades.size() - 1, 6, "upgrade luck ", 10, 10, 6,2);
+	InitUpgrade(m_upgrades.size() - 1, 5, "upgrade luck ", 10, 10, 6,2);
+
+	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
+	InitUpgrade(m_upgrades.size() - 1, 6, "unlock magnet ", 10, 10, 7, 2);
 
 	//exit
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
@@ -84,7 +89,8 @@ void SampleScene::OnUpdate()
 
 
 	m_magnet->SetPosition(m_collector->GetPosition().x, m_collector->GetPosition().y);
-	m_collector->SetRadius(Data::Get()->collectorSize);
+	m_collector->SetRadius(Data::Get()->playerSize);
+	m_magnet->SetRadius(Data::Get()->magnetSize * Data::Get()->playerSize);
 	Debug::DrawText(0, 0, std::to_string(Data::Get()->money), sf::Color::Yellow);
 	Debug::DrawText(0, 20, std::to_string(m_collectibles.size()) + "/" + std::to_string(Data::Get()->capacity), sf::Color::White);
 
@@ -107,7 +113,7 @@ void SampleScene::OnUpdate()
 	{
 		if (m_magnet->IsColliding(m_collectibles[i]))
 		{
-			m_collectibles[i]->GoToPosition(m_magnet->GetPosition().x, m_magnet->GetPosition().y, Data::Get()->collectorSpeed *2);
+			m_collectibles[i]->GoToPosition(m_magnet->GetPosition().x, m_magnet->GetPosition().y, Data::Get()->playerSpeed *2);
 			
 		}
 	}

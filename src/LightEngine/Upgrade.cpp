@@ -16,11 +16,11 @@ void Upgrade::OnClick() {
     switch (m_type)
     {
     case 1:
-        data->collectorSpeed += m_value;
+        data->playerSpeed += m_value;
         m_price *= 1.5;
         break;
     case 2:
-        data->collectorSize *= m_value;
+        data->playerSize *= m_value;
         m_price *= 5;
         break;
 
@@ -41,6 +41,23 @@ void Upgrade::OnClick() {
     case 6:
         data->luck *= m_value;
         m_price *= 10;
+        break;
+    case 7:
+        if(m_level == 2)
+        {
+            m_price *= 0.5;
+            data->magnetSize += 2;
+        }
+
+        else
+        {
+            data->magnetSize += 0.5;
+            m_text = "upgrade magnet size";
+            m_price *= 1.5;
+        }
+
+        
+
         break;
     case 99:
         exit(0);

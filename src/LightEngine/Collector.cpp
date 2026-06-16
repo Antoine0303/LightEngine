@@ -7,7 +7,7 @@ void Collector::OnUpdate()
 {
 	
 
-	float speed = Data::Get()->collectorSpeed;
+	float speed = Data::Get()->playerSpeed;
 	Rectangle rect = GetScene<SampleScene>()->GetRect();
 	sf::Vector2f pos = GetPosition();
 

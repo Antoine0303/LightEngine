@@ -9,11 +9,11 @@ private:
 public:
     static Data* Get();
     int money;
-    int collectorSpeed;
-    float collectorSize;
+    int playerSpeed;
+    float playerSize;
     int collectorNumber;
     float spawnRate;
     int capacity;
     int luck;
-
+    float magnetSize;
 };
