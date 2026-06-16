@@ -58,6 +58,19 @@ void Upgrade::OnClick() {
         }
 
         break;
+
+    case 8:
+        m_locked = false;
+        data->collectorNumber += m_value;
+
+        GetScene<SampleScene>()->AddAutoCollector();
+        m_price *= 10;
+        break;
+
+    case 9:
+        data->autoCollectorSpeed += m_value;
+        m_price *= 10;
+        break;
     case 99:
         exit(0);
         break;
@@ -87,12 +100,12 @@ void Upgrade::Draw(sf::Vector2i mousePos)
         col = sf::Color::Color(255, 255, 255, 100);
 
     Debug::DrawText(pos.x, pos.y, m_text, col);
-    Debug::DrawRectangle(10, pos.y, 300, 30, col);
+    Debug::DrawRectangle(10, pos.y, 350, 30, col);
     
     if (m_type == 99)
         return;
 
-    Debug::DrawText(300, pos.y - 30, "level " + std::to_string(m_level) + "/" + std::to_string(m_MaxLevel), 1, 0, sf::Color::White, 20);
+    Debug::DrawText(350, pos.y - 30, "level " + std::to_string(m_level) + "/" + std::to_string(m_MaxLevel), 1, 0, sf::Color::White, 20);
     if (m_level >= m_MaxLevel)
     {
         Debug::DrawText(10, pos.y - 30, "max", sf::Color::Red);
@@ -120,7 +133,7 @@ void Upgrade::SetLane(int lane)
 bool Upgrade::IsInside(sf::Vector2i mousePos)
 {
     sf::Vector2f pos = this->GetPosition();
-    if (mousePos.x >= 10 && mousePos.x <= 310 && mousePos.y >= pos.y && mousePos.y <= pos.y + 30)
+    if (mousePos.x >= 10 && mousePos.x <= 360 && mousePos.y >= pos.y && mousePos.y <= pos.y + 30)
         return true;
     else
         return false;

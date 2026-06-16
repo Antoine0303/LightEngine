@@ -6,6 +6,7 @@ class DummyEntity;
 class Collector;
 class Upgrade;
 class Magnet;
+class AutoCollector;
 struct Rectangle
 {
 	int x;
@@ -19,10 +20,10 @@ class SampleScene : public Scene
 {
 private:
 	Collector* m_collector;
-	
+
 	Rectangle m_rectangle; 
 	//rect
-
+	std::vector<AutoCollector*> m_autoCollectors;
 	std::vector<DummyEntity*> m_collectibles;
 	
 
@@ -43,7 +44,8 @@ public:
 	int GetMoney() { return m_money; };
 	void SetMoney(int value) { m_money = value; };
 	void AddMoney(int value) { m_money += value; };
-	void InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value);
+	void InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value, bool locked = false);
+	void AddAutoCollector();
 };
 
 

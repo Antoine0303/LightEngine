@@ -6,20 +6,22 @@
 #include "Upgrade.h"
 #include "GameManager.h"
 #include "Data.h"
+#include "AutoCollector.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "Magnet.h"
 void SampleScene::OnInitialize()
 {
-
-	Data::Get()->money = 0;
-	Data::Get()->capacity = 10;
-	Data::Get()->spawnRate = 1;
-	Data::Get()->collectorNumber = 0;
-	Data::Get()->playerSize = 20;
-	Data::Get()->playerSpeed = 100;
-	Data::Get()->luck = 0.2;
-	Data::Get()->magnetSize = 0;
+	Data* data = Data::Get();
+	data->money = 0;
+	data->capacity = 10;
+	data->spawnRate = 1;
+	data->collectorNumber = 0;
+	data->playerSize = 20;
+	data->playerSpeed = 100;
+	data->luck = 0.2;
+	data->magnetSize = 0; 
+	data->autoCollectorSpeed = 100;
 
 	m_rectangle = { GetWindowWidth()- GetWindowHeight() ,10,GetWindowHeight() -10,GetWindowHeight() - 20};
 
@@ -42,7 +44,11 @@ void SampleScene::OnInitialize()
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
 	InitUpgrade(m_upgrades.size() - 1, 5, "unlock magnet ", 8, 100, 7, 0.5);
 
+	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
+	InitUpgrade(m_upgrades.size() - 1, 6, "Add Autocollector ", 10, 10, 8, 1);
 
+	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
+	InitUpgrade(m_upgrades.size() - 1, 7, "Upgrade Autocollector Speed ", 10, 10, 9, 50);
 
 	//exit
 	m_upgrades.push_back(CreateEntity<Upgrade>(20, sf::Color::Black));
@@ -50,7 +56,7 @@ void SampleScene::OnInitialize()
 
 	m_magnet = CreateEntity<Magnet>(100, sf::Color::Transparent);
 }
-void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value)
+void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLevel, int price, int type, float value, bool locked)
 {
 	m_upgrades[index]->SetLane(lane);
 	m_upgrades[index]->SetText(text);
@@ -58,7 +64,16 @@ void SampleScene::InitUpgrade(int index, int lane, std::string text, int maxLeve
 	m_upgrades[index]->SetType(type);
 	m_upgrades[index]->SetValue(value);
 	m_upgrades[index]->SetMaxLevel(maxLevel);
+	m_upgrades[index]->SetLocked(locked);
 
+
+}
+void SampleScene::AddAutoCollector()
+{
+	AutoCollector* autoCollector = CreateEntity<AutoCollector>(Data::Get()->playerSize, sf::Color::Green);
+	autoCollector->SetPosition(m_rectangle.x + m_rectangle.width / 2, m_rectangle.y + m_rectangle.height / 2);
+	autoCollector->GoToDirection(1, 1, Data::Get()->autoCollectorSpeed);
+	m_autoCollectors.push_back(autoCollector);
 }
 void SampleScene::OnEvent(const sf::Event& event)
 {
@@ -114,9 +129,6 @@ void SampleScene::OnUpdate()
 			m_collectibles[i]->GoToPosition(m_magnet->GetPosition().x, m_magnet->GetPosition().y, Data::Get()->playerSpeed *2);
 			
 		}
-	}
-	for (int i = 0; i < m_collectibles.size(); i++)
-	{
 		if (m_collector->IsColliding(m_collectibles[i]))
 		{
 			m_collectibles[i]->Destroy();
@@ -124,5 +136,18 @@ void SampleScene::OnUpdate()
 			
 		}
 	}
+	for (int i = 0; i < m_collectibles.size(); i++)
+	{
+		for (AutoCollector* collector : m_autoCollectors) {
+
+			if (collector->IsColliding(m_collectibles[i]))
+			{
+				m_collectibles[i]->Destroy();
+				m_collectibles.erase(m_collectibles.begin() + i);
+				return;
+			}
+		}
+	}
+
 }
 
