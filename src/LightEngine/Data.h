@@ -17,6 +17,8 @@ public:
     float luck;
     float magnetSize;
     float autoCollectorSpeed;
+    float saveluck;
+    bool cheat;
     
 
 };

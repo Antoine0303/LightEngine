@@ -1,5 +1,5 @@
 #include <SFML/System/Vector2.hpp>
-
+#include <SFML/Graphics/Color.hpp>
 #include <cmath>
 #include "Utils.h"
 
@@ -41,4 +41,41 @@ namespace Utils
 		return rand() % (max - min + 1) + min;
 		
 	}
+	
+	sf::Color RandomColor() {
+	sf::Color color;
+
+	int number = Utils::GenerateRandomNumber(1, 7);
+
+	switch (number)
+	{
+	case 1:
+		color = sf::Color::Blue;
+		break;
+	case 2:
+		color = sf::Color::Cyan;
+		break;
+	case 3:
+		color = sf::Color::Green;
+		break;
+	case 4:
+		color = sf::Color::Magenta;
+		break;
+	case 5:
+		color = sf::Color::Red;
+		break;
+	case 6:
+		color = sf::Color::White;
+		break;
+	case 7:
+		color = sf::Color::Yellow;
+		break;
+
+	default:
+		break;
+	}
+
+	return color;
 }
+}
+

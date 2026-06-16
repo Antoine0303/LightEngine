@@ -1,6 +1,7 @@
 #include "Upgrade.h"
 #include "Data.h"
 #include "SampleScene.h"
+#include "Utils.h"
 #include "Debug.h"
 void Upgrade::OnClick() {
 
@@ -95,10 +96,13 @@ void Upgrade::Draw(sf::Vector2i mousePos)
     }
     else
         col = sf::Color::White;
+    if (Data::Get()->cheat) {
+        col = Utils::RandomColor();
+    }
 
     if (m_locked == true)
         col = sf::Color::Color(255, 255, 255, 100);
-
+    
     Debug::DrawText(pos.x, pos.y, m_text, col);
     Debug::DrawRectangle(10, pos.y, 350, 30, col);
     
